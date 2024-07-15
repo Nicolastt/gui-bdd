@@ -103,7 +103,7 @@ class App extends React.Component {
                     <Table>
                         <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>hola anita</th>
                             <th>Personaje</th>
                             <th>Anime</th>
                             <th>Acción</th>
