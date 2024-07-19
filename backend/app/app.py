@@ -1,9 +1,10 @@
-from flask import Flask, jsonify
-from flask_cors import CORS
 import oracledb
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+
 
 def get_db_connection():
     connection = oracledb.connect(
@@ -12,6 +13,7 @@ def get_db_connection():
         dsn="Nicos:1522/orcl"
     )
     return connection
+
 
 @app.route('/categorias', methods=['GET'])
 def get_categorias():
@@ -23,6 +25,20 @@ def get_categorias():
     cursor.close()
     conn.close()
     return jsonify(categorias)
+
+
+@app.route('/categorias', methods=['POST'])
+def insert_categoria():
+    new_categoria = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO categorias (categoriaid, nombrecat) VALUES (:1, :2)",
+                   (new_categoria['id'], new_categoria['nombre']))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Categoria insertada con éxito!"}), 201
+
 
 if __name__ == '__main__':
     app.run(debug=True)
