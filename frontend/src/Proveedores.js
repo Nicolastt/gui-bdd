@@ -100,40 +100,41 @@ class Proveedores extends Component {
         return (
             <>
                 <Container>
-                    <br />
+                    <h1>Proveedores</h1>
+                    <br/>
                     <Button color="success" onClick={this.mostrarModalInsertar}>Crear</Button>
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
                     <Table>
                         <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Contacto</th>
-                                <th>Celular</th>
-                                <th>Ciudad</th>
-                                <th>Acción</th>
-                            </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Contacto</th>
+                            <th>Celular</th>
+                            <th>Ciudad</th>
+                            <th>Acción</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {this.state.proveedores.map((proveedor) => (
-                                <tr key={proveedor.id}>
-                                    <td>{proveedor.id}</td>
-                                    <td>{proveedor.nombre}</td>
-                                    <td>{proveedor.contacto}</td>
-                                    <td>{proveedor.celular}</td>
-                                    <td>{proveedor.ciudad}</td>
-                                    <td>
-                                        <Button
-                                            color="primary"
-                                            onClick={() => this.mostrarModalActualizar(proveedor)}
-                                        >
-                                            Editar
-                                        </Button>{" "}
-                                        <Button color="danger" onClick={() => this.eliminar(proveedor)}>Eliminar</Button>
-                                    </td>
-                                </tr>
-                            ))}
+                        {this.state.proveedores.map((proveedor) => (
+                            <tr key={proveedor.id}>
+                                <td>{proveedor.id}</td>
+                                <td>{proveedor.nombre}</td>
+                                <td>{proveedor.contacto}</td>
+                                <td>{proveedor.celular}</td>
+                                <td>{proveedor.ciudad}</td>
+                                <td>
+                                    <Button
+                                        color="primary"
+                                        onClick={() => this.mostrarModalActualizar(proveedor)}
+                                    >
+                                        Editar
+                                    </Button>{" "}
+                                    <Button color="danger" onClick={() => this.eliminar(proveedor)}>Eliminar</Button>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </Table>
                 </Container>
