@@ -167,7 +167,6 @@ def insert_empleado():
     return jsonify(new_empleado), 201
 
 
-
 @app.route('/empleados/<int:empleado_id>', methods=['PUT'])
 def update_empleado(empleado_id):
     updated_empleado = request.json
@@ -221,6 +220,66 @@ def delete_empleado(empleado_id):
         cursor.close()
         conn.close()
         return jsonify({"message": str(e)}), 500
+
+
+@app.route('/ordenes', methods=['GET'])
+def get_ordenes():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT ORDENID, CLIENTEID, EMPLEADOID, FECHAORDEN, DESCUENTO FROM ORDENES")
+    rows = cursor.fetchall()
+    ordenes = [
+        {"ordenid": row[0], "clienteid": row[1], "empleadoid": row[2], "fechaorden": row[3].strftime('%Y-%m-%d'),
+         "descuento": row[4]}
+        for row in rows
+    ]
+    cursor.close()
+    conn.close()
+    return jsonify(ordenes)
+
+
+@app.route('/ordenes', methods=['POST'])
+def insert_orden():
+    new_orden = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO ORDENES (ORDENID, CLIENTEID, EMPLEADOID, FECHAORDEN, DESCUENTO) VALUES (:1, :2, :3, TO_DATE(:4, 'YYYY-MM-DD'), :5)",
+        (new_orden['ordenid'], new_orden['clienteid'], new_orden['empleadoid'], new_orden['fechaorden'],
+         new_orden['descuento'])
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Orden insertada con éxito!"}), 201
+
+
+@app.route('/ordenes/<int:id>', methods=['DELETE'])
+def delete_orden(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM ORDENES WHERE ORDENID = :1", (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Orden eliminada con éxito!"}), 200
+
+
+@app.route('/ordenes/<int:id>', methods=['PUT'])
+def update_orden(id):
+    updated_orden = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE ORDENES SET CLIENTEID = :1, EMPLEADOID = :2, FECHAORDEN = TO_DATE(:3, 'YYYY-MM-DD'), DESCUENTO = :4 WHERE ORDENID = :5",
+        (updated_orden['clienteid'], updated_orden['empleadoid'], updated_orden['fechaorden'],
+         updated_orden['descuento'], id)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Orden actualizada con éxito!"}), 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)
