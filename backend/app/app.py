@@ -399,5 +399,65 @@ def update_producto(id):
     return jsonify({"message": "Producto actualizado con éxito!"}), 200
 
 
+@app.route('/detalleordenes', methods=['GET'])
+def get_detalle_ordenes():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT ORDENID, DETALLEID, PRODUCTOID, CANTIDAD
+        FROM DETALLE_ORDENES
+    """)
+    rows = cursor.fetchall()
+    detalles = [{"ordenid": row[0], "detalleid": row[1], "productoid": row[2], "cantidad": row[3]} for row in rows]
+    cursor.close()
+    conn.close()
+    return jsonify(detalles)
+
+
+@app.route('/detalleordenes', methods=['POST'])
+def insert_detalle_orden():
+    new_detalle = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO DETALLE_ORDENES (ORDENID, DETALLEID, PRODUCTOID, CANTIDAD)
+        VALUES (:1, :2, :3, :4)
+    """, (new_detalle['ordenid'], new_detalle['detalleid'], new_detalle['productoid'], new_detalle['cantidad']))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Detalle de orden insertado con éxito!"}), 201
+
+
+@app.route('/detalleordenes/<int:ordenid>/<int:detalleid>', methods=['DELETE'])
+def delete_detalle_orden(ordenid, detalleid):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        DELETE FROM DETALLE_ORDENES
+        WHERE ORDENID = :1 AND DETALLEID = :2
+    """, (ordenid, detalleid))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Detalle de orden eliminado con éxito!"}), 200
+
+
+@app.route('/detalleordenes/<int:ordenid>/<int:detalleid>', methods=['PUT'])
+def update_detalle_orden(ordenid, detalleid):
+    updated_detalle = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        UPDATE DETALLE_ORDENES
+        SET PRODUCTOID = :1, CANTIDAD = :2
+        WHERE ORDENID = :3 AND DETALLEID = :4
+    """, (updated_detalle['productoid'], updated_detalle['cantidad'], ordenid, detalleid))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Detalle de orden actualizado con éxito!"}), 200
+
+
 if __name__ == '__main__':
     app.run(debug=True)
