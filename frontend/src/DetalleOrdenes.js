@@ -98,38 +98,39 @@ class DetalleOrdenes extends Component {
         return (
             <>
                 <Container>
-                    <br />
+                    <h1>Detalle Órdenes</h1>
+                    <br/>
                     <Button color="success" onClick={this.mostrarModalInsertar}>Crear</Button>
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
                     <Table>
                         <thead>
-                            <tr>
-                                <th>Orden ID</th>
-                                <th>Detalle ID</th>
-                                <th>Producto ID</th>
-                                <th>Cantidad</th>
-                                <th>Acción</th>
-                            </tr>
+                        <tr>
+                            <th>Orden ID</th>
+                            <th>Detalle ID</th>
+                            <th>Producto ID</th>
+                            <th>Cantidad</th>
+                            <th>Acción</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {this.state.detalles.map((detalle) => (
-                                <tr key={`${detalle.ordenid}-${detalle.detalleid}`}>
-                                    <td>{detalle.ordenid}</td>
-                                    <td>{detalle.detalleid}</td>
-                                    <td>{detalle.productoid}</td>
-                                    <td>{detalle.cantidad}</td>
-                                    <td>
-                                        <Button
-                                            color="primary"
-                                            onClick={() => this.mostrarModalActualizar(detalle)}
-                                        >
-                                            Editar
-                                        </Button>{" "}
-                                        <Button color="danger" onClick={() => this.eliminar(detalle)}>Eliminar</Button>
-                                    </td>
-                                </tr>
-                            ))}
+                        {this.state.detalles.map((detalle) => (
+                            <tr key={`${detalle.ordenid}-${detalle.detalleid}`}>
+                                <td>{detalle.ordenid}</td>
+                                <td>{detalle.detalleid}</td>
+                                <td>{detalle.productoid}</td>
+                                <td>{detalle.cantidad}</td>
+                                <td>
+                                    <Button
+                                        color="primary"
+                                        onClick={() => this.mostrarModalActualizar(detalle)}
+                                    >
+                                        Editar
+                                    </Button>{" "}
+                                    <Button color="danger" onClick={() => this.eliminar(detalle)}>Eliminar</Button>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </Table>
                 </Container>
