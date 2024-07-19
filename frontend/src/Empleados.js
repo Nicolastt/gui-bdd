@@ -108,42 +108,43 @@ class Empleados extends Component {
         return (
             <>
                 <Container>
-                    <br />
+                    <h1>Empleados</h1>
+                    <br/>
                     <Button color="success" onClick={this.mostrarModalInsertar}>Crear</Button>
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
                     <Table>
                         <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Jefe ID</th>
-                                <th>Nombre</th>
-                                <th>Apellido</th>
-                                <th>Fecha de Nacimiento</th>
-                                <th>Extensión</th>
-                                <th>Acción</th>
-                            </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Jefe ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Fecha de Nacimiento</th>
+                            <th>Extensión</th>
+                            <th>Acción</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {this.state.empleados.map((empleado) => (
-                                <tr key={empleado.empleado_id}>
-                                    <td>{empleado.empleado_id}</td>
-                                    <td>{empleado.jefe_id}</td>
-                                    <td>{empleado.nombre}</td>
-                                    <td>{empleado.apellido}</td>
-                                    <td>{empleado.fecha_nac}</td>
-                                    <td>{empleado.extension}</td>
-                                    <td>
-                                        <Button
-                                            color="primary"
-                                            onClick={() => this.mostrarModalActualizar(empleado)}
-                                        >
-                                            Editar
-                                        </Button>{" "}
-                                        <Button color="danger" onClick={() => this.eliminar(empleado)}>Eliminar</Button>
-                                    </td>
-                                </tr>
-                            ))}
+                        {this.state.empleados.map((empleado) => (
+                            <tr key={empleado.empleado_id}>
+                                <td>{empleado.empleado_id}</td>
+                                <td>{empleado.jefe_id}</td>
+                                <td>{empleado.nombre}</td>
+                                <td>{empleado.apellido}</td>
+                                <td>{empleado.fecha_nac}</td>
+                                <td>{empleado.extension}</td>
+                                <td>
+                                    <Button
+                                        color="primary"
+                                        onClick={() => this.mostrarModalActualizar(empleado)}
+                                    >
+                                        Editar
+                                    </Button>{" "}
+                                    <Button color="danger" onClick={() => this.eliminar(empleado)}>Eliminar</Button>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </Table>
                 </Container>
