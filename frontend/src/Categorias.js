@@ -49,9 +49,10 @@ class Categorias extends Component {
         this.setState({ modalInsertar: false });
     };
 
-    editar = async (dato) => {
+    editar = async () => {
+        const { form } = this.state;
         try {
-            await axios.put(`http://localhost:5000/categorias/${dato.id}`, dato);
+            await axios.put(`http://localhost:5000/categorias/${form.id}`, form);
             this.getCategorias();
             this.setState({ modalActualizar: false });
         } catch (error) {
@@ -164,19 +165,18 @@ class Categorias extends Component {
                     <ModalFooter>
                         <Button
                             color="primary"
-                            onClick={() => this.editar(this.state.form)}
+                            onClick={this.editar}
                         >
                             Confirmar
                         </Button>
                         <Button
                             color="danger"
-                            onClick={() => this.cerrarModalActualizar()}
+                            onClick={this.cerrarModalActualizar}
                         >
                             Cancelar
                         </Button>
                     </ModalFooter>
                 </Modal>
-
 
                 <Modal isOpen={this.state.modalInsertar}>
                     <ModalHeader>
@@ -213,13 +213,13 @@ class Categorias extends Component {
                     <ModalFooter>
                         <Button
                             color="primary"
-                            onClick={() => this.insertar()}
+                            onClick={this.insertar}
                         >
                             Insertar
                         </Button>
                         <Button
                             className="btn btn-danger"
-                            onClick={() => this.cerrarModalInsertar()}
+                            onClick={this.cerrarModalInsertar}
                         >
                             Cancelar
                         </Button>
