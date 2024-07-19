@@ -101,45 +101,46 @@ class Clientes extends Component {
         return (
             <>
                 <Container>
-                    <br />
+                    <h1>Clientes</h1>
+                    <br/>
                     <Button color="success" onClick={() => this.mostrarModalInsertar()}>Crear</Button>
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
                     <Table>
                         <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Cédula/RUC</th>
-                                <th>Nombre de la Compañía</th>
-                                <th>Nombre del Contacto</th>
-                                <th>Dirección</th>
-                                <th>Celular</th>
-                                <th>Ciudad</th>
-                                <th>Acción</th>
-                            </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cédula/RUC</th>
+                            <th>Nombre de la Compañía</th>
+                            <th>Nombre del Contacto</th>
+                            <th>Dirección</th>
+                            <th>Celular</th>
+                            <th>Ciudad</th>
+                            <th>Acción</th>
+                        </tr>
                         </thead>
 
                         <tbody>
-                            {this.state.clientes.map((cliente) => (
-                                <tr key={cliente.id}>
-                                    <td>{cliente.id}</td>
-                                    <td>{cliente.cedula_ruc}</td>
-                                    <td>{cliente.nombrecia}</td>
-                                    <td>{cliente.nombrecontacto}</td>
-                                    <td>{cliente.direccioncli}</td>
-                                    <td>{cliente.celular}</td>
-                                    <td>{cliente.ciudadcli}</td>
-                                    <td>
-                                        <Button
-                                            color="primary"
-                                            onClick={() => this.mostrarModalActualizar(cliente)}
-                                        >
-                                            Editar
-                                        </Button>{" "}
-                                        <Button color="danger" onClick={() => this.eliminar(cliente)}>Eliminar</Button>
-                                    </td>
-                                </tr>
-                            ))}
+                        {this.state.clientes.map((cliente) => (
+                            <tr key={cliente.id}>
+                                <td>{cliente.id}</td>
+                                <td>{cliente.cedula_ruc}</td>
+                                <td>{cliente.nombrecia}</td>
+                                <td>{cliente.nombrecontacto}</td>
+                                <td>{cliente.direccioncli}</td>
+                                <td>{cliente.celular}</td>
+                                <td>{cliente.ciudadcli}</td>
+                                <td>
+                                    <Button
+                                        color="primary"
+                                        onClick={() => this.mostrarModalActualizar(cliente)}
+                                    >
+                                        Editar
+                                    </Button>{" "}
+                                    <Button color="danger" onClick={() => this.eliminar(cliente)}>Eliminar</Button>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </Table>
                 </Container>
