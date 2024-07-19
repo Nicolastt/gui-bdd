@@ -106,41 +106,42 @@ class Ordenes extends Component {
         return (
             <>
                 <Container>
-                    <br />
+                    <h1>Órdenes</h1>
+                    <br/>
                     <Button color="success" onClick={this.mostrarModalInsertar}>Crear</Button>
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
                     <Table>
                         <thead>
-                            <tr>
-                                <th>Orden ID</th>
-                                <th>Cliente ID</th>
-                                <th>Empleado ID</th>
-                                <th>Fecha Orden</th>
-                                <th>Descuento</th>
-                                <th>Acción</th>
-                            </tr>
+                        <tr>
+                            <th>Orden ID</th>
+                            <th>Cliente ID</th>
+                            <th>Empleado ID</th>
+                            <th>Fecha Orden</th>
+                            <th>Descuento</th>
+                            <th>Acción</th>
+                        </tr>
                         </thead>
 
                         <tbody>
-                            {this.state.ordenes.map((orden) => (
-                                <tr key={orden.ordenid}>
-                                    <td>{orden.ordenid}</td>
-                                    <td>{orden.clienteid}</td>
-                                    <td>{orden.empleadoid}</td>
-                                    <td>{new Date(orden.fechaorden).toLocaleDateString()}</td>
-                                    <td>{orden.descuento}</td>
-                                    <td>
-                                        <Button
-                                            color="primary"
-                                            onClick={() => this.mostrarModalActualizar(orden)}
-                                        >
-                                            Editar
-                                        </Button>{" "}
-                                        <Button color="danger" onClick={() => this.eliminar(orden)}>Eliminar</Button>
-                                    </td>
-                                </tr>
-                            ))}
+                        {this.state.ordenes.map((orden) => (
+                            <tr key={orden.ordenid}>
+                                <td>{orden.ordenid}</td>
+                                <td>{orden.clienteid}</td>
+                                <td>{orden.empleadoid}</td>
+                                <td>{new Date(orden.fechaorden).toLocaleDateString()}</td>
+                                <td>{orden.descuento}</td>
+                                <td>
+                                    <Button
+                                        color="primary"
+                                        onClick={() => this.mostrarModalActualizar(orden)}
+                                    >
+                                        Editar
+                                    </Button>{" "}
+                                    <Button color="danger" onClick={() => this.eliminar(orden)}>Eliminar</Button>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </Table>
                 </Container>
