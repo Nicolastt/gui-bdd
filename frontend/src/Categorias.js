@@ -96,35 +96,37 @@ class Categorias extends Component {
         return (
             <>
                 <Container>
-                    <br />
+                    <h1>Categorías</h1>
+                    <br/>
                     <Button color="success" onClick={() => this.mostrarModalInsertar()}>Crear</Button>
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
+
                     <Table>
                         <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Acción</th>
-                            </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Acción</th>
+                        </tr>
                         </thead>
 
                         <tbody>
-                            {this.state.categorias.map((categoria) => (
-                                <tr key={categoria.id}>
-                                    <td>{categoria.id}</td>
-                                    <td>{categoria.nombre}</td>
-                                    <td>
-                                        <Button
-                                            color="primary"
-                                            onClick={() => this.mostrarModalActualizar(categoria)}
-                                        >
-                                            Editar
-                                        </Button>{" "}
-                                        <Button color="danger" onClick={() => this.eliminar(categoria)}>Eliminar</Button>
-                                    </td>
-                                </tr>
-                            ))}
+                        {this.state.categorias.map((categoria) => (
+                            <tr key={categoria.id}>
+                                <td>{categoria.id}</td>
+                                <td>{categoria.nombre}</td>
+                                <td>
+                                    <Button
+                                        color="primary"
+                                        onClick={() => this.mostrarModalActualizar(categoria)}
+                                    >
+                                        Editar
+                                    </Button>{" "}
+                                    <Button color="danger" onClick={() => this.eliminar(categoria)}>Eliminar</Button>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </Table>
                 </Container>
