@@ -281,5 +281,59 @@ def update_orden(id):
     return jsonify({"message": "Orden actualizada con éxito!"}), 200
 
 
+@app.route('/proveedores', methods=['GET'])
+def get_proveedores():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT proveedorid, nombreprov, contacto, celuprov, ciudadprov FROM proveedores")
+    rows = cursor.fetchall()
+    proveedores = [{"id": row[0], "nombre": row[1], "contacto": row[2], "celular": row[3], "ciudad": row[4]} for row in
+                   rows]
+    cursor.close()
+    conn.close()
+    return jsonify(proveedores)
+
+
+@app.route('/proveedores', methods=['POST'])
+def insert_proveedor():
+    new_proveedor = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO proveedores (proveedorid, nombreprov, contacto, celuprov, ciudadprov) VALUES (:1, :2, :3, :4, :5)",
+        (new_proveedor['id'], new_proveedor['nombre'], new_proveedor['contacto'], new_proveedor['celular'],
+         new_proveedor['ciudad']))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Proveedor insertado con éxito!"}), 201
+
+
+@app.route('/proveedores/<int:id>', methods=['DELETE'])
+def delete_proveedor(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM proveedores WHERE proveedorid = :1", (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Proveedor eliminado con éxito!"}), 200
+
+
+@app.route('/proveedores/<int:id>', methods=['PUT'])
+def update_proveedor(id):
+    updated_proveedor = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE proveedores SET nombreprov = :1, contacto = :2, celuprov = :3, ciudadprov = :4 WHERE proveedorid = :5",
+        (updated_proveedor['nombre'], updated_proveedor['contacto'], updated_proveedor['celular'],
+         updated_proveedor['ciudad'], id))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Proveedor actualizado con éxito!"}), 200
+
+
 if __name__ == '__main__':
     app.run(debug=True)
