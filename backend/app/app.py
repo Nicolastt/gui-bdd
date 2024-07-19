@@ -335,5 +335,69 @@ def update_proveedor(id):
     return jsonify({"message": "Proveedor actualizado con éxito!"}), 200
 
 
+@app.route('/productos', methods=['GET'])
+def get_productos():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT PRODUCTOID, CATEGORIAID, PROVEEDORID, DESCRIPCION, PRECIOUNIT, EXISTENCIA FROM PRODUCTOS")
+    rows = cursor.fetchall()
+    productos = [
+        {
+            "id": row[0],
+            "categoria_id": row[1],
+            "proveedor_id": row[2],
+            "descripcion": row[3],
+            "precio_unit": row[4],
+            "existencia": row[5]
+        } for row in rows
+    ]
+    cursor.close()
+    conn.close()
+    return jsonify(productos)
+
+
+@app.route('/productos', methods=['POST'])
+def insert_producto():
+    new_producto = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO PRODUCTOS (PRODUCTOID, CATEGORIAID, PROVEEDORID, DESCRIPCION, PRECIOUNIT, EXISTENCIA) VALUES (:1, :2, :3, :4, :5, :6)",
+        (new_producto['id'], new_producto['categoria_id'], new_producto['proveedor_id'], new_producto['descripcion'],
+         new_producto['precio_unit'], new_producto['existencia'])
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Producto insertado con éxito!"}), 201
+
+
+@app.route('/productos/<int:id>', methods=['DELETE'])
+def delete_producto(id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM PRODUCTOS WHERE PRODUCTOID = :1", (id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Producto eliminado con éxito!"}), 200
+
+
+@app.route('/productos/<int:id>', methods=['PUT'])
+def update_producto(id):
+    updated_producto = request.json
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE PRODUCTOS SET CATEGORIAID = :1, PROVEEDORID = :2, DESCRIPCION = :3, PRECIOUNIT = :4, EXISTENCIA = :5 WHERE PRODUCTOID = :6",
+        (updated_producto['categoria_id'], updated_producto['proveedor_id'], updated_producto['descripcion'],
+         updated_producto['precio_unit'], updated_producto['existencia'], id)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return jsonify({"message": "Producto actualizado con éxito!"}), 200
+
+
 if __name__ == '__main__':
     app.run(debug=True)
