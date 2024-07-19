@@ -100,43 +100,44 @@ class Productos extends Component {
         return (
             <>
                 <Container>
-                    <br />
+                    <h1>Productos</h1>
+                    <br/>
                     <Button color="success" onClick={() => this.mostrarModalInsertar()}>Crear</Button>
-                    <br />
-                    <br />
+                    <br/>
+                    <br/>
                     <Table>
                         <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Categoria ID</th>
-                                <th>Proveedor ID</th>
-                                <th>Descripción</th>
-                                <th>Precio Unitario</th>
-                                <th>Existencia</th>
-                                <th>Acción</th>
-                            </tr>
+                        <tr>
+                            <th>ID</th>
+                            <th>Categoria ID</th>
+                            <th>Proveedor ID</th>
+                            <th>Descripción</th>
+                            <th>Precio Unitario</th>
+                            <th>Existencia</th>
+                            <th>Acción</th>
+                        </tr>
                         </thead>
 
                         <tbody>
-                            {this.state.productos.map((producto) => (
-                                <tr key={producto.id}>
-                                    <td>{producto.id}</td>
-                                    <td>{producto.categoria_id}</td>
-                                    <td>{producto.proveedor_id}</td>
-                                    <td>{producto.descripcion}</td>
-                                    <td>{producto.precio_unit}</td>
-                                    <td>{producto.existencia}</td>
-                                    <td>
-                                        <Button
-                                            color="primary"
-                                            onClick={() => this.mostrarModalActualizar(producto)}
-                                        >
-                                            Editar
-                                        </Button>{" "}
-                                        <Button color="danger" onClick={() => this.eliminar(producto)}>Eliminar</Button>
-                                    </td>
-                                </tr>
-                            ))}
+                        {this.state.productos.map((producto) => (
+                            <tr key={producto.id}>
+                                <td>{producto.id}</td>
+                                <td>{producto.categoria_id}</td>
+                                <td>{producto.proveedor_id}</td>
+                                <td>{producto.descripcion}</td>
+                                <td>{producto.precio_unit}</td>
+                                <td>{producto.existencia}</td>
+                                <td>
+                                    <Button
+                                        color="primary"
+                                        onClick={() => this.mostrarModalActualizar(producto)}
+                                    >
+                                        Editar
+                                    </Button>{" "}
+                                    <Button color="danger" onClick={() => this.eliminar(producto)}>Eliminar</Button>
+                                </td>
+                            </tr>
+                        ))}
                         </tbody>
                     </Table>
                 </Container>
