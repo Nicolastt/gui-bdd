@@ -1,5 +1,5 @@
 import React from 'react';
-import './Tail.css'; // Asegúrate de crear este archivo para los estilos
+import '../css/Tail.css'; // Asegúrate de crear este archivo para los estilos
 
 const Tail = () => (
     <div className="tail">
