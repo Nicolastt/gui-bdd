@@ -3,6 +3,7 @@ import "../css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 import axios from 'axios';
+import Notificacion from './Notificacion'; // Asegúrate de tener este componente
 
 class Clientes extends Component {
     state = {
@@ -18,6 +19,8 @@ class Clientes extends Component {
             celular: "",
             ciudadcli: ""
         },
+        mensaje: '',       // Estado para el mensaje de notificación
+        tipoNotificacion: '' // Estado para el tipo de notificación
     };
 
     componentDidMount() {
@@ -29,8 +32,15 @@ class Clientes extends Component {
             const response = await axios.get('http://localhost:5000/clientes');
             this.setState({ clientes: response.data });
         } catch (error) {
-            console.error("Hubo un error al obtener los clientes!", error);
+            this.mostrarNotificacion("Hubo un error al obtener los clientes", "error");
         }
+    }
+
+    mostrarNotificacion = (mensaje, tipo) => {
+        this.setState({ mensaje, tipoNotificacion: tipo });
+        setTimeout(() => {
+            this.setState({ mensaje: '', tipoNotificacion: '' });
+        }, 3000); // Oculta la notificación después de 3 segundos
     }
 
     mostrarModalActualizar = (dato) => {
@@ -60,8 +70,9 @@ class Clientes extends Component {
             await axios.put(`http://localhost:5000/clientes/${form.id}`, form);
             this.getClientes();
             this.setState({ modalActualizar: false });
+            this.mostrarNotificacion("Cliente actualizado con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al actualizar el cliente!", error);
+            this.mostrarNotificacion("Hubo un error al actualizar el cliente", "error");
         }
     };
 
@@ -71,8 +82,9 @@ class Clientes extends Component {
             try {
                 await axios.delete(`http://localhost:5000/clientes/${dato.id}`);
                 this.getClientes();
+                this.mostrarNotificacion("Cliente eliminado con éxito", "success");
             } catch (error) {
-                console.error("Hubo un error al eliminar el cliente!", error);
+                this.mostrarNotificacion("Hubo un error al eliminar el cliente", "error");
             }
         }
     };
@@ -83,8 +95,9 @@ class Clientes extends Component {
             await axios.post('http://localhost:5000/clientes', newCliente);
             this.getClientes();
             this.setState({ modalInsertar: false });
+            this.mostrarNotificacion("Cliente creado con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al crear el cliente!", error);
+            this.mostrarNotificacion("Hubo un error al crear el cliente", "error");
         }
     }
 
@@ -119,7 +132,6 @@ class Clientes extends Component {
                             <th>Acción</th>
                         </tr>
                         </thead>
-
                         <tbody>
                         {this.state.clientes.map((cliente) => (
                             <tr key={cliente.id}>
@@ -300,6 +312,10 @@ class Clientes extends Component {
                         <Button color="danger" onClick={() => this.cerrarModalInsertar()}>Cancelar</Button>
                     </ModalFooter>
                 </Modal>
+
+                {this.state.mensaje && (
+                    <Notificacion mensaje={this.state.mensaje} tipo={this.state.tipoNotificacion} />
+                )}
             </>
         );
     }
