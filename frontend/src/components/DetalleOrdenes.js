@@ -3,6 +3,7 @@ import "../css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 import axios from 'axios';
+import Notificacion from './Notificacion'; // Asegúrate de tener este componente
 
 class DetalleOrdenes extends Component {
     state = {
@@ -15,6 +16,8 @@ class DetalleOrdenes extends Component {
             productoid: "",
             cantidad: "",
         },
+        mensaje: '',       // Estado para el mensaje de notificación
+        tipoNotificacion: '' // Estado para el tipo de notificación
     };
 
     componentDidMount() {
@@ -26,8 +29,15 @@ class DetalleOrdenes extends Component {
             const response = await axios.get('http://localhost:5000/detalleordenes');
             this.setState({ detalles: response.data });
         } catch (error) {
-            console.error("Hubo un error al obtener los detalles de órdenes!", error);
+            this.mostrarNotificacion("Hubo un error al obtener los detalles de órdenes", "error");
         }
+    }
+
+    mostrarNotificacion = (mensaje, tipo) => {
+        this.setState({ mensaje, tipoNotificacion: tipo });
+        setTimeout(() => {
+            this.setState({ mensaje: '', tipoNotificacion: '' });
+        }, 3000); // Oculta la notificación después de 3 segundos
     }
 
     mostrarModalActualizar = (dato) => {
@@ -57,8 +67,9 @@ class DetalleOrdenes extends Component {
             await axios.put(`http://localhost:5000/detalleordenes/${form.ordenid}/${form.detalleid}`, form);
             this.getDetalles();
             this.setState({ modalActualizar: false });
+            this.mostrarNotificacion("Detalle de orden actualizado con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al actualizar el detalle de la orden!", error);
+            this.mostrarNotificacion("Hubo un error al actualizar el detalle de la orden", "error");
         }
     };
 
@@ -68,8 +79,9 @@ class DetalleOrdenes extends Component {
             try {
                 await axios.delete(`http://localhost:5000/detalleordenes/${dato.ordenid}/${dato.detalleid}`);
                 this.getDetalles();
+                this.mostrarNotificacion("Detalle de orden eliminado con éxito", "success");
             } catch (error) {
-                console.error("Hubo un error al eliminar el detalle de la orden!", error);
+                this.mostrarNotificacion("Hubo un error al eliminar el detalle de la orden", "error");
             }
         }
     };
@@ -80,8 +92,9 @@ class DetalleOrdenes extends Component {
             await axios.post('http://localhost:5000/detalleordenes', newDetalle);
             this.getDetalles();
             this.setState({ modalInsertar: false });
+            this.mostrarNotificacion("Detalle de orden creado con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al crear el detalle de la orden!", error);
+            this.mostrarNotificacion("Hubo un error al crear el detalle de la orden", "error");
         }
     }
 
@@ -262,6 +275,10 @@ class DetalleOrdenes extends Component {
                         </Button>
                     </ModalFooter>
                 </Modal>
+
+                {this.state.mensaje && (
+                    <Notificacion mensaje={this.state.mensaje} tipo={this.state.tipoNotificacion} />
+                )}
             </>
         );
     }
