@@ -3,6 +3,7 @@ import "../css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 import axios from 'axios';
+import Notificacion from './Notificacion'; // Importa el componente Notificacion
 
 class Empleados extends Component {
     state = {
@@ -17,6 +18,8 @@ class Empleados extends Component {
             fecha_nac: "",
             extension: "",
         },
+        mensaje: '',       // Estado para el mensaje de notificación
+        tipoNotificacion: '' // Estado para el tipo de notificación
     };
 
     componentDidMount() {
@@ -28,8 +31,15 @@ class Empleados extends Component {
             const response = await axios.get('http://localhost:5000/empleados');
             this.setState({ empleados: response.data });
         } catch (error) {
-            console.error("Hubo un error al obtener los empleados!", error);
+            this.mostrarNotificacion("Hubo un error al obtener los empleados", "error");
         }
+    }
+
+    mostrarNotificacion = (mensaje, tipo) => {
+        this.setState({ mensaje, tipoNotificacion: tipo });
+        setTimeout(() => {
+            this.setState({ mensaje: '', tipoNotificacion: '' });
+        }, 3000); // Oculta la notificación después de 3 segundos
     }
 
     mostrarModalActualizar = (dato) => {
@@ -67,8 +77,9 @@ class Empleados extends Component {
             await axios.put(`http://localhost:5000/empleados/${form.empleado_id}`, form);
             this.getEmpleados();
             this.setState({ modalActualizar: false });
+            this.mostrarNotificacion("Empleado actualizado con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al actualizar el empleado!", error);
+            this.mostrarNotificacion("Hubo un error al actualizar el empleado", "error");
         }
     };
 
@@ -78,8 +89,9 @@ class Empleados extends Component {
             try {
                 await axios.delete(`http://localhost:5000/empleados/${dato.empleado_id}`);
                 this.getEmpleados();
+                this.mostrarNotificacion("Empleado eliminado con éxito", "success");
             } catch (error) {
-                console.error("Hubo un error al eliminar el empleado!", error);
+                this.mostrarNotificacion("Hubo un error al eliminar el empleado", "error");
             }
         }
     };
@@ -90,8 +102,9 @@ class Empleados extends Component {
             await axios.post('http://localhost:5000/empleados', newEmpleado);
             this.getEmpleados();
             this.setState({ modalInsertar: false });
+            this.mostrarNotificacion("Empleado creado con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al crear el empleado!", error);
+            this.mostrarNotificacion("Hubo un error al crear el empleado", "error");
         }
     }
 
@@ -312,13 +325,21 @@ class Empleados extends Component {
                             Insertar
                         </Button>
                         <Button
-                            className="btn btn-danger"
+                            color="danger"
                             onClick={this.cerrarModalInsertar}
                         >
                             Cancelar
                         </Button>
                     </ModalFooter>
                 </Modal>
+
+                {/* Renderiza el componente Notificacion */}
+                {this.state.mensaje && (
+                    <Notificacion
+                        mensaje={this.state.mensaje}
+                        tipo={this.state.tipoNotificacion}
+                    />
+                )}
             </>
         );
     }
