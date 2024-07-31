@@ -3,6 +3,7 @@ import "../css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 import axios from 'axios';
+import Notificacion from './Notificacion'; // Importa el componente Notificacion
 
 class Ordenes extends Component {
     state = {
@@ -16,6 +17,8 @@ class Ordenes extends Component {
             fechaorden: "",
             descuento: "",
         },
+        mensaje: '',       // Estado para el mensaje de notificación
+        tipoNotificacion: '' // Estado para el tipo de notificación
     };
 
     componentDidMount() {
@@ -27,8 +30,15 @@ class Ordenes extends Component {
             const response = await axios.get('http://localhost:5000/ordenes');
             this.setState({ ordenes: response.data });
         } catch (error) {
-            console.error("Hubo un error al obtener las órdenes!", error);
+            this.mostrarNotificacion("Hubo un error al obtener las órdenes", "error");
         }
+    }
+
+    mostrarNotificacion = (mensaje, tipo) => {
+        this.setState({ mensaje, tipoNotificacion: tipo });
+        setTimeout(() => {
+            this.setState({ mensaje: '', tipoNotificacion: '' });
+        }, 3000); // Oculta la notificación después de 3 segundos
     }
 
     mostrarModalActualizar = (dato) => {
@@ -65,8 +75,9 @@ class Ordenes extends Component {
             await axios.put(`http://localhost:5000/ordenes/${form.ordenid}`, form);
             this.getOrdenes();
             this.setState({ modalActualizar: false });
+            this.mostrarNotificacion("Orden actualizada con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al actualizar la orden!", error);
+            this.mostrarNotificacion("Hubo un error al actualizar la orden", "error");
         }
     };
 
@@ -76,8 +87,9 @@ class Ordenes extends Component {
             try {
                 await axios.delete(`http://localhost:5000/ordenes/${dato.ordenid}`);
                 this.getOrdenes();
+                this.mostrarNotificacion("Orden eliminada con éxito", "success");
             } catch (error) {
-                console.error("Hubo un error al eliminar la orden!", error);
+                this.mostrarNotificacion("Hubo un error al eliminar la orden", "error");
             }
         }
     };
@@ -88,8 +100,9 @@ class Ordenes extends Component {
             await axios.post('http://localhost:5000/ordenes', newOrden);
             this.getOrdenes();
             this.setState({ modalInsertar: false });
+            this.mostrarNotificacion("Orden creada con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al crear la orden!", error);
+            this.mostrarNotificacion("Hubo un error al crear la orden", "error");
         }
     }
 
@@ -275,6 +288,14 @@ class Ordenes extends Component {
                         <Button color="danger" onClick={this.cerrarModalInsertar}>Cancelar</Button>
                     </ModalFooter>
                 </Modal>
+
+                {/* Renderiza el componente Notificacion */}
+                {this.state.mensaje && (
+                    <Notificacion
+                        mensaje={this.state.mensaje}
+                        tipo={this.state.tipoNotificacion}
+                    />
+                )}
             </>
         );
     }
