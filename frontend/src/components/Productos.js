@@ -3,6 +3,7 @@ import "../css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 import axios from 'axios';
+import Notificacion from './Notificacion'; // Importamos el componente Notificacion
 
 class Productos extends Component {
     state = {
@@ -17,6 +18,8 @@ class Productos extends Component {
             precio_unit: "",
             existencia: ""
         },
+        mensaje: '',       // Estado para el mensaje de notificación
+        tipoNotificacion: '' // Estado para el tipo de notificación
     };
 
     componentDidMount() {
@@ -28,8 +31,15 @@ class Productos extends Component {
             const response = await axios.get('http://localhost:5000/productos');
             this.setState({ productos: response.data });
         } catch (error) {
-            console.error("Hubo un error al obtener los productos!", error);
+            this.mostrarNotificacion("Hubo un error al obtener los productos", "error");
         }
+    }
+
+    mostrarNotificacion = (mensaje, tipo) => {
+        this.setState({ mensaje, tipoNotificacion: tipo });
+        setTimeout(() => {
+            this.setState({ mensaje: '', tipoNotificacion: '' });
+        }, 3000); // Oculta la notificación después de 3 segundos
     }
 
     mostrarModalActualizar = (dato) => {
@@ -59,8 +69,9 @@ class Productos extends Component {
             await axios.put(`http://localhost:5000/productos/${form.id}`, form);
             this.getProductos();
             this.setState({ modalActualizar: false });
+            this.mostrarNotificacion("Producto actualizado con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al actualizar el producto!", error);
+            this.mostrarNotificacion("Hubo un error al actualizar el producto", "error");
         }
     };
 
@@ -70,8 +81,9 @@ class Productos extends Component {
             try {
                 await axios.delete(`http://localhost:5000/productos/${dato.id}`);
                 this.getProductos();
+                this.mostrarNotificacion("Producto eliminado con éxito", "success");
             } catch (error) {
-                console.error("Hubo un error al eliminar el producto!", error);
+                this.mostrarNotificacion("Hubo un error al eliminar el producto", "error");
             }
         }
     };
@@ -82,8 +94,9 @@ class Productos extends Component {
             await axios.post('http://localhost:5000/productos', newProducto);
             this.getProductos();
             this.setState({ modalInsertar: false });
+            this.mostrarNotificacion("Producto creado con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al crear el producto!", error);
+            this.mostrarNotificacion("Hubo un error al crear el producto", "error");
         }
     }
 
@@ -302,6 +315,14 @@ class Productos extends Component {
                         </Button>
                     </ModalFooter>
                 </Modal>
+
+                {/* Mostrar notificación si hay un mensaje */}
+                {this.state.mensaje && (
+                    <Notificacion
+                        mensaje={this.state.mensaje}
+                        tipo={this.state.tipoNotificacion}
+                    />
+                )}
             </>
         );
     }
