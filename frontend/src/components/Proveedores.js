@@ -3,6 +3,7 @@ import "../css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 import axios from 'axios';
+import Notificacion from './Notificacion'; // Importamos el componente Notificacion
 
 class Proveedores extends Component {
     state = {
@@ -16,6 +17,8 @@ class Proveedores extends Component {
             celular: "",
             ciudad: "",
         },
+        mensaje: '',       // Estado para el mensaje de notificación
+        tipoNotificacion: '' // Estado para el tipo de notificación
     };
 
     componentDidMount() {
@@ -27,8 +30,15 @@ class Proveedores extends Component {
             const response = await axios.get('http://localhost:5000/proveedores');
             this.setState({ proveedores: response.data });
         } catch (error) {
-            console.error("Hubo un error al obtener los proveedores!", error);
+            this.mostrarNotificacion("Hubo un error al obtener los proveedores", "error");
         }
+    }
+
+    mostrarNotificacion = (mensaje, tipo) => {
+        this.setState({ mensaje, tipoNotificacion: tipo });
+        setTimeout(() => {
+            this.setState({ mensaje: '', tipoNotificacion: '' });
+        }, 3000); // Oculta la notificación después de 3 segundos
     }
 
     mostrarModalActualizar = (dato) => {
@@ -59,8 +69,9 @@ class Proveedores extends Component {
             await axios.put(`http://localhost:5000/proveedores/${form.id}`, form);
             this.getProveedores();
             this.setState({ modalActualizar: false });
+            this.mostrarNotificacion("Proveedor actualizado con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al actualizar el proveedor!", error);
+            this.mostrarNotificacion("Hubo un error al actualizar el proveedor", "error");
         }
     };
 
@@ -70,8 +81,9 @@ class Proveedores extends Component {
             try {
                 await axios.delete(`http://localhost:5000/proveedores/${dato.id}`);
                 this.getProveedores();
+                this.mostrarNotificacion("Proveedor eliminado con éxito", "success");
             } catch (error) {
-                console.error("Hubo un error al eliminar el proveedor!", error);
+                this.mostrarNotificacion("Hubo un error al eliminar el proveedor", "error");
             }
         }
     };
@@ -82,8 +94,9 @@ class Proveedores extends Component {
             await axios.post('http://localhost:5000/proveedores', newProveedor);
             this.getProveedores();
             this.setState({ modalInsertar: false });
+            this.mostrarNotificacion("Proveedor creado con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al crear el proveedor!", error);
+            this.mostrarNotificacion("Hubo un error al crear el proveedor", "error");
         }
     }
 
@@ -256,6 +269,14 @@ class Proveedores extends Component {
                         <Button className="btn btn-danger" onClick={this.cerrarModalInsertar}>Cancelar</Button>
                     </ModalFooter>
                 </Modal>
+
+                {/* Mostrar notificación si hay un mensaje */}
+                {this.state.mensaje && (
+                    <Notificacion
+                        mensaje={this.state.mensaje}
+                        tipo={this.state.tipoNotificacion}
+                    />
+                )}
             </>
         );
     }
