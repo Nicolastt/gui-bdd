@@ -3,6 +3,7 @@ import "../css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 import axios from 'axios';
+import Notificacion from './Notificacion'; // Importamos el componente Notificacion
 
 class Categorias extends Component {
     state = {
@@ -13,6 +14,8 @@ class Categorias extends Component {
             id: "",
             nombre: "",
         },
+        mensaje: '',       // Estado para el mensaje de notificación
+        tipoNotificacion: '' // Estado para el tipo de notificación
     };
 
     componentDidMount() {
@@ -24,8 +27,15 @@ class Categorias extends Component {
             const response = await axios.get('http://localhost:5000/categorias');
             this.setState({ categorias: response.data });
         } catch (error) {
-            console.error("Hubo un error al obtener las categorías!", error);
+            this.mostrarNotificacion("Hubo un error al obtener las categorías", "error");
         }
+    }
+
+    mostrarNotificacion = (mensaje, tipo) => {
+        this.setState({ mensaje, tipoNotificacion: tipo });
+        setTimeout(() => {
+            this.setState({ mensaje: '', tipoNotificacion: '' });
+        }, 3000); // Oculta la notificación después de 3 segundos
     }
 
     mostrarModalActualizar = (dato) => {
@@ -55,8 +65,9 @@ class Categorias extends Component {
             await axios.put(`http://localhost:5000/categorias/${form.id}`, form);
             this.getCategorias();
             this.setState({ modalActualizar: false });
+            this.mostrarNotificacion("Categoría actualizada con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al actualizar la categoría!", error);
+            this.mostrarNotificacion("Hubo un error al actualizar la categoría", "error");
         }
     };
 
@@ -66,8 +77,9 @@ class Categorias extends Component {
             try {
                 await axios.delete(`http://localhost:5000/categorias/${dato.id}`);
                 this.getCategorias();
+                this.mostrarNotificacion("Categoría eliminada con éxito", "success");
             } catch (error) {
-                console.error("Hubo un error al eliminar la categoría!", error);
+                this.mostrarNotificacion("Hubo un error al eliminar la categoría", "error");
             }
         }
     };
@@ -78,8 +90,9 @@ class Categorias extends Component {
             await axios.post('http://localhost:5000/categorias', newCategoria);
             this.getCategorias();
             this.setState({ modalInsertar: false });
+            this.mostrarNotificacion("Categoría creada con éxito", "success");
         } catch (error) {
-            console.error("Hubo un error al crear la categoría!", error);
+            this.mostrarNotificacion("Hubo un error al crear la categoría", "error");
         }
     }
 
@@ -227,6 +240,14 @@ class Categorias extends Component {
                         </Button>
                     </ModalFooter>
                 </Modal>
+
+                {/* Mostrar notificación si hay un mensaje */}
+                {this.state.mensaje && (
+                    <Notificacion
+                        mensaje={this.state.mensaje}
+                        tipo={this.state.tipoNotificacion}
+                    />
+                )}
             </>
         );
     }
