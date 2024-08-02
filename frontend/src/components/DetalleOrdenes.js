@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import "../css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Button, Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
+import {Button, Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader, Table} from "reactstrap";
 import axios from 'axios';
 import Notificacion from './Notificacion'; // Asegúrate de tener este componente
 
@@ -27,16 +27,16 @@ class DetalleOrdenes extends Component {
     getDetalles = async () => {
         try {
             const response = await axios.get('http://localhost:5000/detalleordenes');
-            this.setState({ detalles: response.data });
+            this.setState({detalles: response.data});
         } catch (error) {
             this.mostrarNotificacion("Hubo un error al obtener los detalles de órdenes", "error");
         }
     }
 
     mostrarNotificacion = (mensaje, tipo) => {
-        this.setState({ mensaje, tipoNotificacion: tipo });
+        this.setState({mensaje, tipoNotificacion: tipo});
         setTimeout(() => {
-            this.setState({ mensaje: '', tipoNotificacion: '' });
+            this.setState({mensaje: '', tipoNotificacion: ''});
         }, 3000); // Oculta la notificación después de 3 segundos
     }
 
@@ -48,7 +48,7 @@ class DetalleOrdenes extends Component {
     };
 
     cerrarModalActualizar = () => {
-        this.setState({ modalActualizar: false });
+        this.setState({modalActualizar: false});
     };
 
     mostrarModalInsertar = () => {
@@ -58,15 +58,15 @@ class DetalleOrdenes extends Component {
     };
 
     cerrarModalInsertar = () => {
-        this.setState({ modalInsertar: false });
+        this.setState({modalInsertar: false});
     };
 
     editar = async () => {
-        const { form } = this.state;
+        const {form} = this.state;
         try {
             await axios.put(`http://localhost:5000/detalleordenes/${form.ordenid}/${form.detalleid}`, form);
             this.getDetalles();
-            this.setState({ modalActualizar: false });
+            this.setState({modalActualizar: false});
             this.mostrarNotificacion("Detalle de orden actualizado con éxito", "success");
         } catch (error) {
             this.mostrarNotificacion("Hubo un error al actualizar el detalle de la orden", "error");
@@ -87,11 +87,11 @@ class DetalleOrdenes extends Component {
     };
 
     insertar = async () => {
-        const newDetalle = { ...this.state.form };
+        const newDetalle = {...this.state.form};
         try {
             await axios.post('http://localhost:5000/detalleordenes', newDetalle);
             this.getDetalles();
-            this.setState({ modalInsertar: false });
+            this.setState({modalInsertar: false});
             this.mostrarNotificacion("Detalle de orden creado con éxito", "success");
         } catch (error) {
             this.mostrarNotificacion("Hubo un error al crear el detalle de la orden", "error");
@@ -119,8 +119,8 @@ class DetalleOrdenes extends Component {
                     <Table>
                         <thead>
                         <tr>
-                            <th>Orden ID</th>
                             <th>Detalle ID</th>
+                            <th>Orden ID</th>
                             <th>Producto ID</th>
                             <th>Cantidad</th>
                             <th>Acción</th>
@@ -129,8 +129,8 @@ class DetalleOrdenes extends Component {
                         <tbody>
                         {this.state.detalles.map((detalle) => (
                             <tr key={`${detalle.ordenid}-${detalle.detalleid}`}>
-                                <td>{detalle.ordenid}</td>
                                 <td>{detalle.detalleid}</td>
+                                <td>{detalle.ordenid}</td>
                                 <td>{detalle.productoid}</td>
                                 <td>{detalle.cantidad}</td>
                                 <td>
@@ -155,22 +155,22 @@ class DetalleOrdenes extends Component {
 
                     <ModalBody>
                         <FormGroup>
-                            <label>Orden ID:</label>
-                            <input
-                                className="form-control"
-                                readOnly
-                                type="text"
-                                value={this.state.form.ordenid}
-                            />
-                        </FormGroup>
-
-                        <FormGroup>
                             <label>Detalle ID:</label>
                             <input
                                 className="form-control"
                                 readOnly
                                 type="text"
                                 value={this.state.form.detalleid}
+                            />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <label>Orden ID:</label>
+                            <input
+                                className="form-control"
+                                readOnly
+                                type="text"
+                                value={this.state.form.ordenid}
                             />
                         </FormGroup>
 
@@ -220,20 +220,20 @@ class DetalleOrdenes extends Component {
 
                     <ModalBody>
                         <FormGroup>
-                            <label>Orden ID:</label>
+                            <label>Detalle ID:</label>
                             <input
                                 className="form-control"
-                                name="ordenid"
+                                name="detalleid"
                                 type="text"
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
 
                         <FormGroup>
-                            <label>Detalle ID:</label>
+                            <label>Orden ID:</label>
                             <input
                                 className="form-control"
-                                name="detalleid"
+                                name="ordenid"
                                 type="text"
                                 onChange={this.handleChange}
                             />
@@ -277,7 +277,7 @@ class DetalleOrdenes extends Component {
                 </Modal>
 
                 {this.state.mensaje && (
-                    <Notificacion mensaje={this.state.mensaje} tipo={this.state.tipoNotificacion} />
+                    <Notificacion mensaje={this.state.mensaje} tipo={this.state.tipoNotificacion}/>
                 )}
             </>
         );
