@@ -459,5 +459,26 @@ def update_detalle_orden(ordenid, detalleid):
     return jsonify({"message": "Detalle de orden actualizado con éxito!"}), 200
 
 
+@app.route('/auditoria', methods=['GET'])
+def get_auditoria():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT user_name, fecha, tipo_operacion, nombre_table, anterior, nuevo FROM auditoria")
+    rows = cursor.fetchall()
+    auditoria = [
+        {
+            "user_name": row[0],
+            "fecha": row[1].strftime('%Y-%m-%d'),
+            "tipo_operacion": row[2],
+            "nombre_table": row[3],
+            "anterior": row[4],
+            "nuevo": row[5]
+        } for row in rows
+    ]
+    cursor.close()
+    conn.close()
+    return jsonify(auditoria)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
