@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {Table} from 'reactstrap';
+import { Table } from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
-import './Auditoria.css';
+import '../css/Auditoria.css';
 
 const Auditoria = () => {
     const [data, setData] = useState([]);
@@ -17,8 +17,15 @@ const Auditoria = () => {
             }
         };
 
+        // Fetch data initially
         fetchData();
-    }, []);
+
+        // Set up an interval to fetch data every 5 seconds
+        const intervalId = setInterval(fetchData, 5000);
+
+        // Clean up interval on component unmount
+        return () => clearInterval(intervalId);
+    }, []); // Empty dependency array means this useEffect runs once on mount
 
     return (
         <div className="auditoria-container">
