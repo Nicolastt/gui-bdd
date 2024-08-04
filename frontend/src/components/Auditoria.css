@@ -1,10 +1,10 @@
-.container-auditoria {
+.auditoria-container {
     margin: 30px auto;
     max-width: 90%;
 }
 
-h1 {
-    color: #2c3e50;
+.auditoria-title {
+    color: #000000;
     font-family: 'Arial', sans-serif;
     font-size: 2.5rem;
     margin-bottom: 30px;
@@ -12,44 +12,41 @@ h1 {
     letter-spacing: 2px;
 }
 
-.table {
+.auditoria-table {
     background-color: #fdfdfd;
     border-radius: 10px;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s;
 }
 
-
-
-.table th, .table td {
+.auditoria-th, .auditoria-td {
     vertical-align: middle;
     text-align: center;
 }
 
-.table thead {
+.auditoria-thead {
     background-color: #007bff;
     color: white;
 }
 
-.table-striped tbody tr:nth-of-type(odd) {
+.auditoria-tr:nth-of-type(odd) {
     background-color: #f9f9f9;
 }
 
-.table-striped tbody tr:hover {
+.auditoria-tr:hover {
     background-color: #e2e6ea;
     transform: translateX(10px);
     transition: all 0.2s ease-in-out;
 }
 
-.table th {
+.auditoria-th {
     font-weight: bold;
     font-size: 1.1rem;
     padding: 15px;
 }
 
-.table td {
+.auditoria-td {
     padding: 10px;
     font-size: 1rem;
     font-family: 'Arial', sans-serif;
 }
-
