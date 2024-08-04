@@ -463,7 +463,11 @@ def update_detalle_orden(ordenid, detalleid):
 def get_auditoria():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT user_name, fecha, tipo_operacion, nombre_table, anterior, nuevo FROM auditoria")
+    cursor.execute("""
+        SELECT user_name, fecha, tipo_operacion, nombre_table, anterior, nuevo 
+        FROM auditoria
+        ORDER BY audit_id ASC
+    """)
     rows = cursor.fetchall()
     auditoria = [
         {
@@ -478,6 +482,7 @@ def get_auditoria():
     cursor.close()
     conn.close()
     return jsonify(auditoria)
+
 
 
 if __name__ == '__main__':
