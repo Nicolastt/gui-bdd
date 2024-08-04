@@ -19,7 +19,7 @@ def get_db_connection():
 def get_categorias():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT categoriaid, nombrecat FROM categorias")
+    cursor.execute("SELECT categoriaid, nombrecat FROM categorias ORDER BY categoriaid ASC")
     rows = cursor.fetchall()
     categorias = [{"id": row[0], "nombre": row[1]} for row in rows]
     cursor.close()
@@ -69,7 +69,7 @@ def get_clientes():
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute(
-        "SELECT CLIENTEID, CEDULA_RUC, NOMBRECIA, NOMBRECONTACTO, DIRECCIONCLI, CELULAR, CIUDADCLI FROM CLIENTES")
+        "SELECT CLIENTEID, CEDULA_RUC, NOMBRECIA, NOMBRECONTACTO, DIRECCIONCLI, CELULAR, CIUDADCLI FROM CLIENTES ORDER BY CLIENTEID ASC")
     rows = cursor.fetchall()
     clientes = [
         {"id": row[0], "cedula_ruc": row[1], "nombrecia": row[2], "nombrecontacto": row[3], "direccioncli": row[4],
@@ -127,6 +127,7 @@ def get_empleados():
     cursor.execute("""
         SELECT EMPLEADOID, EMP_EMPLEADOID, NOMBRE, APELLIDO, TO_CHAR(FECHA_NAC, 'YYYY-MM-DD'), EXTENSION
         FROM EMPLEADOS
+        ORDER BY EMPLEADOID ASC
     """)
     rows = cursor.fetchall()
     empleados = [
@@ -226,7 +227,7 @@ def delete_empleado(empleado_id):
 def get_ordenes():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT ORDENID, CLIENTEID, EMPLEADOID, FECHAORDEN, DESCUENTO FROM ORDENES")
+    cursor.execute("SELECT ORDENID, CLIENTEID, EMPLEADOID, FECHAORDEN, DESCUENTO FROM ORDENES ORDER BY ORDENID ASC")
     rows = cursor.fetchall()
     ordenes = [
         {"ordenid": row[0], "clienteid": row[1], "empleadoid": row[2], "fechaorden": row[3].strftime('%Y-%m-%d'),
@@ -285,7 +286,7 @@ def update_orden(id):
 def get_proveedores():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT proveedorid, nombreprov, contacto, celuprov, ciudadprov FROM proveedores")
+    cursor.execute("SELECT proveedorid, nombreprov, contacto, celuprov, ciudadprov FROM proveedores ORDER BY proveedorid ASC")
     rows = cursor.fetchall()
     proveedores = [{"id": row[0], "nombre": row[1], "contacto": row[2], "celular": row[3], "ciudad": row[4]} for row in
                    rows]
@@ -339,7 +340,11 @@ def update_proveedor(id):
 def get_productos():
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT PRODUCTOID, CATEGORIAID, PROVEEDORID, DESCRIPCION, PRECIOUNIT, EXISTENCIA FROM PRODUCTOS")
+    cursor.execute("""
+    SELECT PRODUCTOID, CATEGORIAID, PROVEEDORID, DESCRIPCION, PRECIOUNIT, EXISTENCIA 
+    FROM PRODUCTOS 
+    ORDER BY PRODUCTOID ASC""")
+
     rows = cursor.fetchall()
     productos = [
         {
@@ -406,6 +411,7 @@ def get_detalle_ordenes():
     cursor.execute("""
         SELECT ORDENID, DETALLEID, PRODUCTOID, CANTIDAD
         FROM DETALLE_ORDENES
+        ORDER BY ORDENID ASC
     """)
     rows = cursor.fetchall()
     detalles = [{"ordenid": row[0], "detalleid": row[1], "productoid": row[2], "cantidad": row[3]} for row in rows]
