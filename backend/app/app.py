@@ -8,8 +8,8 @@ CORS(app)
 
 def get_db_connection():
     connection = oracledb.connect(
-        user="gpupiales",
-        password="gpupiales",
+        user="sedeQuito",
+        password="sedeQuito",
         dsn="Nicos:1522/orcl"
     )
     return connection
