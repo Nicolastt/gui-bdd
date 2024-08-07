@@ -3,7 +3,7 @@ import "../css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Button, Container, FormGroup, Modal, ModalBody, ModalFooter, ModalHeader, Table } from "reactstrap";
 import axios from 'axios';
-import Notificacion from './Notificacion'; // Importamos el componente Notificacion
+import Notificacion from './Notificacion';
 
 class Categorias extends Component {
     state = {

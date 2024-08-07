@@ -464,7 +464,7 @@ def update_detalle_orden(ordenid, detalleid):
     conn.close()
     return jsonify({"message": "Detalle de orden actualizado con éxito!"}), 200
 
-
+# Comentario en audotoria
 @app.route('/auditoria', methods=['GET'])
 def get_auditoria():
     conn = get_db_connection()
